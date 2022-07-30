@@ -25,6 +25,10 @@ export class Player {
         this.element.style.top = `${pos.y}px`;
     }
 
+    setPreyer(isPreyer) {
+        this.element.classList[isPreyer ? "add" : "remove"]("preyer");
+    }
+
     hide() {
         this.element.classList.add("hidden");
     }

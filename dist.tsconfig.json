@@ -6,11 +6,11 @@
             "ES2018"
         ],
         "outDir": "./dist",
-        "rootDir": "./src",
+        "rootDir": "./code",
         "types": []
     },
     "include": [
-        "./src"
+        "./code"
     ],
     "extends": "./base.tsconfig.json"
 }

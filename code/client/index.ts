@@ -20,21 +20,13 @@ window.onload = () => {
         socket.emit("position", mouse.pos);
         // console.log(mouse.pos);
     }, 10);
-    socket.on("update", (dataS) => {
+    socket.on("update", (allData) => {
         // console.log(dataS);
-        dataS.forEach(({ id, data }) => {
-            if (playerData.has(id)) {
-                // if (data.alive) {
-                const player = playerData.getPlayer(id);
-                player.move(data.pos);
-                // } else {
-                //     playerData.deletePlayer(id);
-                // }
-            } else {
-                playerData.addPlayer(id, data.def);
-                const player = playerData.getPlayer(id);
-                player.move(data.pos);
-            }
+        allData.forEach(({ id, data }) => {
+            if (!playerData.has(id)) { playerData.addPlayer(id, data.def); }
+            const player = playerData.getPlayer(id);
+            player.move(data.pos);
+            player.setPreyer(data.isPreyer);
         });
     });
 
