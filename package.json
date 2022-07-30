@@ -8,7 +8,8 @@
         "build": "tsc --project dist.tsconfig.json",
         "reset": "npm run clean && npm run build",
         "lint": "npx eslint code/**/*",
-        "server": "node ./code/server/index.js"
+        "server": "node  --experimental-specifier-resolution=node ./dist/server/index.js",
+        "bundle": "npx webpack --config webpack.dist.cjs"
     },
     "repository": {
         "type": "git",
@@ -31,9 +32,12 @@
         "express": "^4.18.1",
         "shx": "^0.3.4",
         "socket.io": "^4.5.1",
+        "socket.io-client": "^4.5.1",
+        "ts-loader": "^9.3.1",
         "typescript": "^4.7.4"
     },
     "devDependencies": {
-        "socket.io-client": "^4.5.1"
-    }
+        "webpack-cli": "^4.10.0"
+    },
+    "type": "module"
 }

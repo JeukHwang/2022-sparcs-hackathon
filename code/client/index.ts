@@ -8,7 +8,10 @@ import { Mouse } from "./mouse";
 import { PlayerData } from "./playerData";
 
 window.onload = () => {
-    const socket = io.connect("http://localhost:3000");
+    console.log("Start");
+    const socket = io("http://localhost:3000");
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const playerData = new PlayerData(socket);
     const colors = ["white", "maroon", "red", "yellow", "lime", "green", "aqua", "teal", "blue", "purple"];
     const playerDef = {

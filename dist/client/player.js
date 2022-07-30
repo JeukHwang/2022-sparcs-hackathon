@@ -34,3 +34,4 @@ export class Player {
     }
 }
 Player.stage = document.getElementById("stage");
+//# sourceMappingURL=player.js.map

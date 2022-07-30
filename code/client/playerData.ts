@@ -4,7 +4,7 @@ import { Player } from "./player";
 export class PlayerData {
     data: Map<string, Player>;
     socket: Socket;
-    constructor(socket:Socket) {
+    constructor(socket: Socket) {
         this.data = new Map();
         this.socket = socket;
     }

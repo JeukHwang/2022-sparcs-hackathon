@@ -26,3 +26,4 @@ class InputBuffer {
 }
 const buffer = new InputBuffer();
 export { buffer };
+//# sourceMappingURL=inputBuffer.js.map

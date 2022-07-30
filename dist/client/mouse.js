@@ -29,3 +29,4 @@ export class Mouse {
         this.pos = null;
     }
 }
+//# sourceMappingURL=mouse.js.map

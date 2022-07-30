@@ -22,3 +22,4 @@ export class PlayerData {
         return this.data.has(id);
     }
 }
+//# sourceMappingURL=playerData.js.map

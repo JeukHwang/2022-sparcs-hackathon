@@ -104,3 +104,4 @@ Stage.speedRange = 10;
 Stage.frame = 0;
 Stage.preyerDelayInMS = 3000;
 export { Stage };
+//# sourceMappingURL=stage.js.map

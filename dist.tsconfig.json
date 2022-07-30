@@ -7,7 +7,8 @@
         ],
         "outDir": "./dist",
         "rootDir": "./code",
-        "types": []
+        "types": [],
+        "sourceMap": true
     },
     "include": [
         "./code"
