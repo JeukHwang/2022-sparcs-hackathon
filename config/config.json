@@ -1,0 +1,26 @@
+{
+    "development": {
+        "username": "root",
+        "password": "tnfqkrtmtnfqkrtm!",
+        "database": "sparcs",
+        "host": "ssal.sparcs.org",
+        "port": 33061,
+        "dialect": "mysql"
+    },
+    "test": {
+        "username": "root",
+        "password": "tnfqkrtmtnfqkrtm!",
+        "database": "sparcs",
+        "host": "ssal.sparcs.org",
+        "port": 33061,
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": "tnfqkrtmtnfqkrtm!",
+        "database": "sparcs",
+        "host": "ssal.sparcs.org",
+        "port": 33061,
+        "dialect": "mysql"
+    }
+}

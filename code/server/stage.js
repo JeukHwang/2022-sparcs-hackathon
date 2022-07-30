@@ -8,6 +8,7 @@ class Stage {
     static speedRange = 10;
     static frame = 0;
     static preyerDelayInMS = 1500;
+    static timebuffer = 0;
 
     constructor(io) {
         this.io = io;
@@ -15,16 +16,23 @@ class Stage {
     }
 
     setPreyer(id, isPreyer) {
-        this.updatePlayer(id, { isPreyer, preyerStartDate: isPreyer ? Date.now() : null });
+        const player = this.getPlayer(id);
+        const wasPreyer = player.isPreyer;
+        if (!wasPreyer && isPreyer) {
+            this.updatePlayer(id, { isPreyer: true, preyerStartDate: Date.now() });
+        } else if (wasPreyer && !isPreyer) {
+            const dt = Date.now() - this.timebuffer;
+            this.updatePlayer(id, { isPreyer: false, preyerStartDate: null, howLongPreyer: player.howLongPreyer + dt });
+        }
     }
 
     addPlayer(id, data) {
         console.log(`User enter : ${id}`);
         buffer.set(id, Stage.center);
-        const playerInfo = { ...data, id, pos: Stage.center, isPreyer: false, preyerStartDate: null };
+        const playerInfo = { ...data, id, pos: Stage.center, isPreyer: false, preyerStartDate: null, howLongPreyer: 0 };
         this.data.set(id, playerInfo);
-        const amIAlone = this.data.size === 1;
-        this.setPreyer(id, amIAlone);
+        // const amIAlone = this.data.size === 1;
+        // this.setPreyer(id, amIAlone);
     }
 
     updatePlayer(id, data) {
@@ -83,7 +91,6 @@ class Stage {
                 }
             });
             if (shortestElem.dist < 35) {
-
                 this.setPreyer(preyer.id, false);
                 this.setPreyer(shortestElem.player.id, true);
             }
@@ -94,6 +101,9 @@ class Stage {
         Stage.frame += 1;
     }
 
+    playerNumber() {
+        return this.data.size();
+    }
 
     static updatePos(pos, speed, theta) {
         return {
@@ -112,6 +122,21 @@ class Stage {
         const { x: x1, y: y1 } = pos1;
         const { x: x2, y: y2 } = pos2;
         return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5;
+    }
+
+    resetPreyerTimer() {
+        this.data.forEach((player) => { player.howLongPreyer = 0; });
+    }
+
+    getLongestPreyer() {
+        const longest = { player: null, time: Number.NEGATIVE_INFINITY };
+        this.data.forEach((player, id) => {
+            if (longest.time < player.howLongPreyer) {
+                longest.player = player;
+                longest.time = player.howLongPreyer;
+            }
+        });
+        return longest.player;
     }
 }
 module.exports = { Stage };

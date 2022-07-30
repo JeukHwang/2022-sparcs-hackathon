@@ -1,7 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
+
+:root {
+    --grid-cell-size: 60px;
+    --grid-font-size: 20px;
+
+    --tool-cell-size: 50px;
+    --tool-font-size: 20px;
+}
+
 * {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    cursor: crosshair;
     margin: 0px;
     padding: 0px;
-    cursor: crosshair;
+    overflow: hidden;
+    /* background: #333333; */
+}
+
+#button {
+    width: 170px;
+    height: 30px;
+    font-size: 20px;
+    border-radius:3px;
+    background-color: white;
+}
+
+#button:hover{
+    border-color: maroon;
+    color: maroon;
+    cursor: pointer;
 }
 
 #stage { 
@@ -61,4 +91,34 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+#right
+
+.block {
+    /*  block size */
+    min-width: var(--tool-cell-size);
+    min-height: var(--tool-cell-size);
+    width: fit-content;
+
+    /* font size */
+    font-size: var(--tool-font-size);
+
+    /* content center */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ffffff;
+    user-select: none;
+    cursor: pointer;
+}
+
+.right-toolbar {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    height: fit-content;
+    right: 10px;
+    background-color: #ffffff;
 }

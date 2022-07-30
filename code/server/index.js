@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const { Stage } = require("./stage");
 const { buffer } = require("./inputBuffer");
+const { createPlayer, findPlayer, updatePlayer, getAllScore } = require("./data");
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,30 @@ io.on("connect", (socket) => {
         buffer.set(socket.id, pos);
     });
 
+    socket.on("sign", async ({ nickname, password }) => {
+        const players = await findPlayer(nickname);
+        console.log(players);
+        const existPlayer = players.length !== 0;
+        if (!existPlayer) {
+            await createPlayer(nickname, password, 0);
+        } else {
+            const isValidPassword = players[0].password === password;
+            if (!isValidPassword) { socket.emit("sign", { msg: false }); return; }
+        }
+        socket.data = { isLogged: true, nickname };
+        socket.emit("sign", { msg: true });
+    });
+
+    socket.on("game", (msg) => {
+        if (msg && stage.playerNumber() > 1) {
+            Stage.timebuffer = Date.now();
+        }
+    });
+
+    socket.on("get_leaderboard", async () => {
+        const data = await getAllScore();
+        socket.emit("get_leaderboard", data);
+    });
     socket.on("disconnect", () => {
         if (!stage.data.has(socket.id)) { return; }
         stage.removePlayer(socket.id);
@@ -34,6 +59,12 @@ io.on("connect", (socket) => {
     });
 });
 setInterval(stage.update.bind(stage), 20);
+
+// Game loop
+// setInterval(() => {
+//     const playerIDs = Array.from(stage.data.keys());
+
+// })
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server up and running on port ${port}.`));
