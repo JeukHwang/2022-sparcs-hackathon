@@ -61,6 +61,7 @@ Template for TypeScript + ESLint
     - [ ] 리더보드(랭킹)
 
 - [ ] 배포
+- [ ] user input 믿지 않기
 
 ```
   "editor.codeActionsOnSave": {
@@ -68,3 +69,4 @@ Template for TypeScript + ESLint
   },
   "eslint.validate": ["javascript"]
 ```
+https://intrepidgeeks.com/tutorial/animation-css-spark
