@@ -1,9 +1,11 @@
 // import { io } from "socket.io-client";
+// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
+// @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-import { Mouse } from "./mouse.js";
-import { PlayerData } from "./playerData.js";
-
+import type { PlayerInfo, SocketUpdateType } from "../util";
+import { Mouse } from "./mouse";
+import { PlayerData } from "./playerData";
 
 window.onload = () => {
     const socket = io.connect("http://localhost:3000");
@@ -14,23 +16,19 @@ window.onload = () => {
         color: colors[Math.floor(Math.random() * 10)],
     };
     socket.emit("def", playerDef);
-    const stage = document.getElementById("stage");
+    const stage = document.getElementById("stage") as HTMLDivElement;
     const mouse = new Mouse(stage);
-    setInterval(() => {
-        socket.emit("position", mouse.pos);
-        // console.log(mouse.pos);
-    }, 10);
-    socket.on("update", (allData) => {
-        // console.log(dataS);
-        allData.forEach(({ id, data }) => {
-            if (!playerData.has(id)) { playerData.addPlayer(id, data.def); }
-            const player = playerData.getPlayer(id);
-            player.move(data.pos);
-            player.setPreyer(data.isPreyer);
+    setInterval(() => { socket.emit("position", mouse.pos); }, 10);
+    socket.on("update", (allData:SocketUpdateType) => {
+        allData.forEach((playerInfo : PlayerInfo) => {
+            if (!playerData.has(playerInfo.id)) { playerData.addPlayer(playerInfo.id, playerInfo.color); }
+            const player = playerData.getPlayer(playerInfo.id)!;
+            player.move(playerInfo.pos);
+            player.setPreyer(playerInfo.isPreyer);
         });
     });
 
-    socket.on("exit", (id) => {
+    socket.on("exit", (id:string) => {
         playerData.deletePlayer(id);
     });
 };

@@ -1,16 +1,16 @@
-export class Player {
-    static stage = document.getElementById("stage");
+import type { Pos } from "../util";
 
-    constructor(def) {
-        this.def = def; // name, color
+export class Player {
+    static stage = document.getElementById("stage") as HTMLDivElement;
+    element: HTMLDivElement;
+    constructor(color: string) {
         this.element = document.createElement("div");
         this.element.classList.add("player");
-        this.element.style.backgroundColor = def.color;
-        console.log(def.color);
+        this.element.style.backgroundColor = color;
         Player.stage.appendChild(this.element);
     }
 
-    move(pos) {
+    move(pos:Pos) {
         if (pos !== null) {
             this.show();
             this.setPos(pos);
@@ -19,13 +19,13 @@ export class Player {
         }
     }
 
-    setPos(pos) {
+    setPos(pos:Pos) {
         // console.log("setPos", pos);
         this.element.style.left = `${pos.x}px`;
         this.element.style.top = `${pos.y}px`;
     }
 
-    setPreyer(isPreyer) {
+    setPreyer(isPreyer:boolean) {
         this.element.classList[isPreyer ? "add" : "remove"]("preyer");
     }
 

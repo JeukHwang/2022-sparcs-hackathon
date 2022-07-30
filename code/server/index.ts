@@ -1,10 +1,12 @@
-const express = require("express");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+import express from "express";
 
-const cors = require("cors");
-const { Stage } = require("./stage");
-const { buffer } = require("./inputBuffer");
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+import cors from "cors";
+import type { SocketDefType, SocketExitType, SocketPositionType } from "../util";
+import { buffer } from "./inputBuffer";
+import { Stage } from "./stage";
 
 const app = express();
 app.use(express.json());
@@ -17,21 +19,24 @@ const io = new Server(server, { cors: { origin: "*", credentials: true } });
 const stage = new Stage(io);
 
 io.on("connect", (socket) => {
-    socket.once("def", (def) => {
-        stage.addPlayer(socket.id, { def });
+    socket.once("def", (def:SocketDefType) => {
+        stage.addPlayer(socket.id, def);
     });
 
-    socket.on("position", (pos) => {
+    socket.on("position", ({ pos }:SocketPositionType) => {
         if (pos === null) { return; }
         buffer.set(socket.id, pos);
     });
 
     socket.on("disconnect", () => {
-        io.emit("exit", socket.id);
+        const socketData : SocketExitType = { id: socket.id };
+        io.emit("exit", socketData);
         stage.removePlayer(socket.id);
     });
 });
 setInterval(stage.update.bind(stage), 20);
 
 const port = process.env.PORT || 3000;
-server.listen(port, () => console.log(`Server up and running on port ${port}.`));
+server.listen(port, () => {
+    console.log(`Server up and running on port ${port}.`);
+});

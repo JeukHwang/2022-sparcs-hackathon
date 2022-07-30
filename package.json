@@ -22,6 +22,7 @@
     "homepage": "https://github.com/JeukHwang/template-ts-eslint#readme",
     "dependencies": {
         "@tsconfig/node16-strictest-esm": "^1.0.3",
+        "@types/express": "^4.17.13",
         "@typescript-eslint/eslint-plugin": "^5.30.0",
         "@typescript-eslint/parser": "^5.30.0",
         "cors": "^2.8.5",

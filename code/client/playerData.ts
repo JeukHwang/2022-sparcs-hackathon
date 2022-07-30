@@ -1,31 +1,30 @@
-import { Player } from "./player.js";
+import type { Socket } from "socket.io";
+import { Player } from "./player";
 
 export class PlayerData {
-    constructor(socket) {
+    data: Map<string, Player>;
+    socket: Socket;
+    constructor(socket:Socket) {
         this.data = new Map();
         this.socket = socket;
     }
 
-    addPlayer(id, def) {
-        const player = new Player(def);
+    addPlayer(id:string, color: string):void {
+        const player = new Player(color);
         this.data.set(id, player);
     }
 
-    getPlayer(id) {
+    getPlayer(id:string):Player|null {
         return this.data.get(id) || null;
     }
 
-    deletePlayer(id) {
+    deletePlayer(id:string):void {
         const player = this.getPlayer(id);
         this.data.delete(id);
-        player.delete();
+        if (player !== null) { player.delete(); }
     }
 
-    has(id) {
+    has(id:string):boolean {
         return this.data.has(id);
-    }
-
-    getMainPlayer() {
-        return this.getPlayer(this.socket.id);
     }
 }

@@ -1,5 +1,9 @@
+import type { Pos } from "../util";
+
 export class Mouse {
-    constructor(stage) {
+    stage: HTMLDivElement;
+    pos: Pos|null;
+    constructor(stage:HTMLDivElement) {
         this.stage = stage;
         this.pos = null; // {x: number, y: number} || null
         // this.stage.addEventListener("mouseenter", this.mouseEnter.bind(this));
@@ -10,7 +14,7 @@ export class Mouse {
         document.addEventListener("mouseleave", this.mouseLeave.bind(this));
     }
 
-    mouseEnter(event) {
+    mouseEnter(event:MouseEvent) {
         // console.log("enter");
         const rect = this.stage.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -18,7 +22,7 @@ export class Mouse {
         this.pos = { x, y };
     }
 
-    mouseMove(event) {
+    mouseMove(event:MouseEvent) {
         // console.log("move");
         const rect = this.stage.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -26,7 +30,8 @@ export class Mouse {
         this.pos = { x, y };
     }
 
-    mouseLeave(event) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    mouseLeave(_event:MouseEvent) {
         // console.log("leave");
         this.pos = null;
     }

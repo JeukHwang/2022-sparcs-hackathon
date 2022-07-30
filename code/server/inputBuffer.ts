@@ -1,21 +1,29 @@
+import type { Pos } from "../util";
+import { Stage } from "./stage";
+
+type Delta = {dx:number, dy:number, dr:number, theta:number};
 class InputBuffer {
+    data: Map<string, Pos>;
     constructor() {
         this.data = new Map();
     }
 
-    set(id, pos) {
+    set(id:string, pos:Pos):void {
         this.data.set(id, pos);
     }
 
-    get(id) {
-        return this.data.get(id);
+    get(id:string):Pos {
+        if (!this.data.has(id)) {
+            this.data.set(id, Stage.center);
+        }
+        return this.data.get(id)!;
     }
 
-    delete(id) {
+    delete(id:string):void {
         this.data.delete(id);
     }
 
-    getDelta(id, pos) {
+    getDelta(id:string, pos:Pos):Delta {
         const { x, y } = this.get(id);
         const dx = x - pos.x;
         const dy = y - pos.y;
@@ -26,4 +34,5 @@ class InputBuffer {
 }
 
 const buffer = new InputBuffer();
-module.exports = { buffer };
+export { buffer };
+
