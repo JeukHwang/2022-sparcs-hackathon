@@ -16,17 +16,13 @@ window.onload = () => {
     socket.emit("def", playerDef);
     const stage = document.getElementById("stage");
     const mouse = new Mouse(stage);
-    setInterval(() => {
-        socket.emit("position", mouse.pos);
-        // console.log(mouse.pos);
-    }, 10);
+    setInterval(() => { socket.emit("position", { pos: mouse.pos }); }, 10);
     socket.on("update", (allData) => {
-        // console.log(dataS);
-        allData.forEach(({ id, data }) => {
-            if (!playerData.has(id)) { playerData.addPlayer(id, data.def); }
-            const player = playerData.getPlayer(id);
-            player.move(data.pos);
-            player.setPreyer(data.isPreyer);
+        allData.forEach((playerInfo) => {
+            if (!playerData.has(playerInfo.id)) { playerData.addPlayer(playerInfo.id, playerInfo.color); }
+            const player = playerData.getPlayer(playerInfo.id);
+            player.move(playerInfo.pos);
+            player.setPreyer(playerInfo.isPreyer);
         });
     });
 

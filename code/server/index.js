@@ -18,17 +18,18 @@ const stage = new Stage(io);
 
 io.on("connect", (socket) => {
     socket.once("def", (def) => {
-        stage.addPlayer(socket.id, { def });
+        stage.addPlayer(socket.id, def);
     });
 
-    socket.on("position", (pos) => {
+    socket.on("position", ({ pos }) => {
         if (pos === null) { return; }
         buffer.set(socket.id, pos);
     });
 
     socket.on("disconnect", () => {
-        io.emit("exit", socket.id);
+        const socketData = { id: socket.id };
         stage.removePlayer(socket.id);
+        io.emit("exit", socketData);
     });
 });
 setInterval(stage.update.bind(stage), 20);

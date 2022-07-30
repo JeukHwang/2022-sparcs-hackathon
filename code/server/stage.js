@@ -21,9 +21,9 @@ class Stage {
     addPlayer(id, data) {
         console.log(`User enter : ${id}`);
         buffer.set(id, Stage.center);
-        const initData = { ...data, id, pos: Stage.center };
-        this.data.set(id, initData);
-        const amIAlone = this.data.size === 0;
+        const playerInfo = { ...data, id, pos: Stage.center, isPreyer: false, preyerStartDate: null };
+        this.data.set(id, playerInfo);
+        const amIAlone = this.data.size === 1;
         this.setPreyer(id, amIAlone);
     }
 
@@ -32,11 +32,17 @@ class Stage {
     }
 
     getPlayer(id) {
-        return this.data.get(id);
+        return this.data.get(id) || null;
     }
 
     removePlayer(id) {
         console.log(`User leave : ${id}`);
+        const player = this.getPlayer(id);
+        if (!player.isPreyer) {
+            const aliveIDs = Array.from(this.data.keys());
+            const randomID = aliveIDs[Math.floor(Math.random() * aliveIDs.length)];
+            this.setPreyer(randomID, true);
+        }
         this.data.delete(id);
     }
 
@@ -59,7 +65,7 @@ class Stage {
 
         const preyerID = alivePlayerID.find((id) => this.getPlayer(id).isPreyer);
         const preyer = this.getPlayer(preyerID);
-        // console.log({ preyer });
+        console.log({ preyerID, preyer });
 
         if (preyer.preyerStartDate + Stage.preyerDelayInMS < Date.now()) {
             const shortestElem = { player: null, dist: Number.POSITIVE_INFINITY };
@@ -81,8 +87,10 @@ class Stage {
             }
         }
 
-        const currentData = Array.from(this.data.entries()).map(([id, data]) => ({ id, data }));
-        this.io.emit("update", currentData);
+        // const currentData = Array.from(this.data.entries()).map(([id, data]) => ({ id, data }));
+        // this.io.emit("update", currentData);
+        const socketData = Array.from(this.data.values());
+        this.io.emit("update", socketData);
         Stage.frame += 1;
     }
 

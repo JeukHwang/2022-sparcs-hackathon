@@ -6,8 +6,8 @@ export class PlayerData {
         this.socket = socket;
     }
 
-    addPlayer(id, def) {
-        const player = new Player(def);
+    addPlayer(id, color) {
+        const player = new Player(color);
         this.data.set(id, player);
     }
 
@@ -18,7 +18,7 @@ export class PlayerData {
     deletePlayer(id) {
         const player = this.getPlayer(id);
         this.data.delete(id);
-        player.delete();
+        if (player !== null) { player.delete(); }
     }
 
     has(id) {

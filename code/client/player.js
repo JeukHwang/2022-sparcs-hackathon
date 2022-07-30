@@ -1,12 +1,10 @@
 export class Player {
     static stage = document.getElementById("stage");
 
-    constructor(def) {
-        this.def = def; // name, color
+    constructor(color) {
         this.element = document.createElement("div");
         this.element.classList.add("player");
-        this.element.style.backgroundColor = def.color;
-        console.log(def.color);
+        this.element.style.backgroundColor = color;
         Player.stage.appendChild(this.element);
     }
 
