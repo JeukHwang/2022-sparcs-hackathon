@@ -18,7 +18,6 @@ export class Player {
     }
 
     setPos(pos) {
-        // console.log("setPos", pos);
         this.element.style.left = `${pos.x}px`;
         this.element.style.top = `${pos.y}px`;
     }

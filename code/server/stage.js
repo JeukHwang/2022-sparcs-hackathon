@@ -36,9 +36,9 @@ class Stage {
     }
 
     removePlayer(id) {
-        console.log(`User leave : ${id}`);
         const player = this.getPlayer(id);
-        if (!player.isPreyer) {
+        console.log(`User leave : ${id}`, player);
+        if (player.isPreyer) {
             const aliveIDs = Array.from(this.data.keys());
             const randomID = aliveIDs[Math.floor(Math.random() * aliveIDs.length)];
             this.setPreyer(randomID, true);
@@ -55,8 +55,7 @@ class Stage {
         }
         alivePlayerID.forEach((id) => {
             const player = this.getPlayer(id);
-            const { dx, dy, dr, theta } = buffer.getDelta(id, player.pos);
-            // console.log({ id, dx, dy });
+            const { dr, theta } = buffer.getDelta(id, player.pos);
             const ratioSpeed = (dr < Stage.speedRange ? dr / Stage.speedRange : 1) * Stage.speed;
             const movedPos = Stage.updatePos(player.pos, ratioSpeed, theta);
             const boundedPos = Stage.limitedByBoundary(movedPos);
@@ -65,21 +64,18 @@ class Stage {
 
         const preyerID = alivePlayerID.find((id) => this.getPlayer(id).isPreyer);
         const preyer = this.getPlayer(preyerID);
-        console.log({ preyerID, preyer });
-
         if (preyer.preyerStartDate + Stage.preyerDelayInMS < Date.now()) {
             const shortestElem = { player: null, dist: Number.POSITIVE_INFINITY };
             alivePlayerID.forEach((id) => {
                 if (id === preyer.id) { return; }
                 const player = this.getPlayer(id);
-                console.log({ preyer, player });
                 const dist = Stage.calcDistance(preyer.pos, player.pos);
                 if (shortestElem.dist > dist) {
                     shortestElem.player = player;
                     shortestElem.dist = dist;
                 }
             });
-            if (shortestElem.dist < 17) {
+            if (shortestElem.dist < 35) {
                 this.setPreyer(preyer.id, false);
                 this.setPreyer(shortestElem.player.id, true);
                 // this.updatePlayer(preyer.id, { isPreyer: false });
@@ -111,9 +107,7 @@ class Stage {
     static calcDistance(pos1, pos2) {
         const { x: x1, y: y1 } = pos1;
         const { x: x2, y: y2 } = pos2;
-        const disX = x1 - x2;
-        const disY = y1 - y2;
-        return Math.sqrt(Math.abs(disX * disX) + Math.abs(disY * disY));
+        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5;
     }
 }
 module.exports = { Stage };

@@ -26,7 +26,7 @@ window.onload = () => {
         });
     });
 
-    socket.on("exit", (id) => {
+    socket.on("exit", ({ id }) => {
         playerData.deletePlayer(id);
     });
 };

@@ -1,4 +1,4 @@
-const { Stage } = require("./stage");
+// const { Stage } = require("./stage");
 
 class InputBuffer {
     constructor() {
@@ -10,11 +10,11 @@ class InputBuffer {
     }
 
     get(id) {
-        // return this.data.get(id);
-        if (!this.data.has(id)) {
-            this.data.set(id, Stage.center);
-        }
         return this.data.get(id);
+        // if (!this.data.has(id)) {
+        //     this.data.set(id, Stage.center);
+        // }
+        // return this.data.get(id);
     }
 
     delete(id) {

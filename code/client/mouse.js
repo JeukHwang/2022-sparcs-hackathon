@@ -11,7 +11,6 @@ export class Mouse {
     }
 
     mouseEnter(event) {
-        // console.log("enter");
         const rect = this.stage.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
@@ -19,7 +18,6 @@ export class Mouse {
     }
 
     mouseMove(event) {
-        // console.log("move");
         const rect = this.stage.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
@@ -27,7 +25,6 @@ export class Mouse {
     }
 
     mouseLeave(event) {
-        // console.log("leave");
         this.pos = null;
     }
 }
