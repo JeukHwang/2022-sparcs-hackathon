@@ -69,5 +69,8 @@ Template for TypeScript + ESLint
     "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript"]
-```
+
 https://intrepidgeeks.com/tutorial/animation-css-spark
+
+mysql -h database-1.cjrntdyazsq9.ap-northeast-2.rds.amazonaws.com -P 3306 -u admin -p hackathon
+```

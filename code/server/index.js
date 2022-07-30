@@ -27,6 +27,7 @@ io.on("connect", (socket) => {
     });
 
     socket.on("disconnect", () => {
+        if (!stage.data.has(socket.id)) { return; }
         stage.removePlayer(socket.id);
         const socketData = { id: socket.id };
         io.emit("exit", socketData);

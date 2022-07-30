@@ -7,7 +7,7 @@ class Stage {
     static speed = 7;
     static speedRange = 10;
     static frame = 0;
-    static preyerDelayInMS = 3000;
+    static preyerDelayInMS = 1500;
 
     constructor(io) {
         this.io = io;
@@ -36,14 +36,17 @@ class Stage {
     }
 
     removePlayer(id) {
+        console.log("Before remove", this.data, Array.from(this.data.entries()));
         const player = this.getPlayer(id);
         console.log(`User leave : ${id}`, player);
         if (player.isPreyer) {
+            console.log("Remove start");
             const aliveIDs = Array.from(this.data.keys());
             const randomID = aliveIDs[Math.floor(Math.random() * aliveIDs.length)];
             this.setPreyer(randomID, true);
         }
         this.data.delete(id);
+        console.log("Remove finish");
     }
 
     update() {
@@ -51,7 +54,7 @@ class Stage {
         // const alivePlayerID = Object.keys(io.sockets.sockets);
         const alivePlayerID = Array.from(this.data.keys());
         if (Stage.frame % 100 === 0) {
-            console.log(`Frame: ${Stage.frame}, #People: ${alivePlayerID.length}`);
+            console.log(`Frame: ${Stage.frame}, #People: ${alivePlayerID.length}`, this.data);
         }
         alivePlayerID.forEach((id) => {
             const player = this.getPlayer(id);
@@ -64,6 +67,10 @@ class Stage {
 
         const preyerID = alivePlayerID.find((id) => this.getPlayer(id).isPreyer);
         const preyer = this.getPlayer(preyerID);
+        // console.log("Update start");
+        if (preyer === null) {
+            console.log(preyerID, alivePlayerID, Array.from(this.data));
+        }
         if (preyer.preyerStartDate + Stage.preyerDelayInMS < Date.now()) {
             const shortestElem = { player: null, dist: Number.POSITIVE_INFINITY };
             alivePlayerID.forEach((id) => {
@@ -76,15 +83,12 @@ class Stage {
                 }
             });
             if (shortestElem.dist < 35) {
+
                 this.setPreyer(preyer.id, false);
                 this.setPreyer(shortestElem.player.id, true);
-                // this.updatePlayer(preyer.id, { isPreyer: false });
-                // this.updatePlayer(shortestElem.player.id, { isPreyer: true });
             }
         }
-
-        // const currentData = Array.from(this.data.entries()).map(([id, data]) => ({ id, data }));
-        // this.io.emit("update", currentData);
+        // console.log("update finish");
         const socketData = Array.from(this.data.values());
         this.io.emit("update", socketData);
         Stage.frame += 1;

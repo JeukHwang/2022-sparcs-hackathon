@@ -2,10 +2,12 @@ export class Player {
     static stage = document.getElementById("stage");
 
     constructor(color) {
+        this.color = color;
         this.element = document.createElement("div");
         this.element.classList.add("player");
-        this.element.style.backgroundColor = color;
+        this.element.style.backgroundColor = this.color;
         Player.stage.appendChild(this.element);
+        this.img = null;
     }
 
     move(pos) {
@@ -24,6 +26,16 @@ export class Player {
 
     setPreyer(isPreyer) {
         this.element.classList[isPreyer ? "add" : "remove"]("preyer");
+        if (isPreyer && this.img === null) {
+            this.img = document.createElement("img");
+            this.img.src = "../../test/Symbol.svg";
+            this.element.appendChild(this.img);
+            this.element.style.backgroundColor = "black";
+        } else if (!isPreyer && this.img !== null) {
+            this.img.remove();
+            this.img = null;
+            this.element.style.backgroundColor = this.color;
+        }
     }
 
     hide() {
