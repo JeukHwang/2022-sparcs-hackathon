@@ -9,16 +9,16 @@ import { PlayerData } from "./playerData.js";
 window.onload = () => {
     const socket = io.connect("http://localhost:3000");
     const playerData = new PlayerData(socket);
-    const nickname = prompt("nickname");
-    const password = prompt("password");
-    socket.on("sign", (msg) => {
-        if (msg) {
-            alert("login success!");
-        } else {
-            alert("fail to login");
-        }
-    });
-    socket.emit("sign", { nickname, password });
+    // const nickname = prompt("nickname");
+    // const password = prompt("password");
+    // socket.on("sign", (msg) => {
+    //     if (msg) {
+    //         alert("login success!");
+    //     } else {
+    //         alert("fail to login");
+    //     }
+    // });
+    // socket.emit("sign", { nickname, password });
     const colors = ["white", "maroon", "red", "yellow", "lime", "green", "aqua", "teal", "blue", "purple"];
     const playerDef = {
         name: `tester ${Math.floor(Math.random() * 10)}`,
@@ -30,8 +30,10 @@ window.onload = () => {
     setInterval(() => { socket.emit("position", { pos: mouse.pos }); }, 10);
 
     const button = document.getElementById("button");
+    let timebuffer = 0;
     button.addEventListener("click", () => {
         socket.emit("game", { msg: true });
+        timebuffer = Date.now();
     });
 
     setInterval(async () => {
@@ -43,6 +45,10 @@ window.onload = () => {
         nameScore.sort((a, b) => b.score - a.score);
         console.log(nameScore);
         leaderboard.setData(nameScore);
+
+        if (Date.now - timebuffer > 30000) {
+            socket.emit("game", { msg: false });
+        }
     }, 3000);
 
     socket.on("update", (allData) => {

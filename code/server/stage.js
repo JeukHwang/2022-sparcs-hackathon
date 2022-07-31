@@ -22,6 +22,7 @@ class Stage {
             this.updatePlayer(id, { isPreyer: true, preyerStartDate: Date.now() });
         } else if (wasPreyer && !isPreyer) {
             const dt = Date.now() - this.timebuffer;
+            this.timebuffer = Date.now();
             this.updatePlayer(id, { isPreyer: false, preyerStartDate: null, howLongPreyer: player.howLongPreyer + dt });
         }
     }
@@ -101,6 +102,17 @@ class Stage {
         Stage.frame += 1;
     }
 
+    over() {
+        const alivePlayerID = Array.from(this.data.keys());
+        alivePlayerID.forEach((id) => {
+            if (this.getPlayer(id).isPreyer) {
+                this.updatePlayer(id, { howLongPreyer: this.getPlayer(id).howLongPreyer + Date.now() - this.timebuffer });
+            }
+        });
+        this.io.emit("result", { msg: this.getLongestPreyer() });
+        this.resetPreyerTimer();
+    }
+
     playerNumber() {
         return this.data.size();
     }
@@ -125,7 +137,10 @@ class Stage {
     }
 
     resetPreyerTimer() {
-        this.data.forEach((player) => { player.howLongPreyer = 0; });
+        this.data.forEach((player) => {
+            player.preyerStartDate = Date.now();
+            player.howLongPreyer = 0;
+        });
     }
 
     getLongestPreyer() {

@@ -44,6 +44,10 @@ io.on("connect", (socket) => {
     socket.on("game", (msg) => {
         if (msg && stage.playerNumber() > 1) {
             Stage.timebuffer = Date.now();
+            const players = Array.from(stage.data.keys());
+            stage.setPreyer(players[Math.floor(Math.random() * stage.playerNumber())].id, true);
+        } else {
+            stage.over();
         }
     });
 
