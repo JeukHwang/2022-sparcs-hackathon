@@ -5,10 +5,10 @@
     "main": "index.js",
     "scripts": {
         "clean": "shx rm -rf ./dist",
-        "build": "tsc --project dist.tsconfig.json",
+        "build_": "tsc --project dist.tsconfig.json",
         "reset": "npm run clean && npm run build",
         "lint": "npx eslint code/**/*",
-        "server": "node ./code/server/index.js"
+        "start": "node ./code/server/index.js"
     },
     "repository": {
         "type": "git",
