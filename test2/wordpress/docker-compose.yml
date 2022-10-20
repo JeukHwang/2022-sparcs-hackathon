@@ -1,0 +1,20 @@
+version: '3'
+services:
+  Mysql:
+    image: mariadb:10.7
+    ports:
+      - 3306
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: password
+  Wordpress:
+    image: wordpress:5.9.1-php8.1-apache
+    ports:
+      - 5000:80
+    environment:
+      WORDPRESS_DB_HOST: Mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+
+# http://3.34.5.139:5000/ 로 접속하며 inbound 5000 ipv4 0.0.0.0:5000 으로 뚫어주기

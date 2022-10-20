@@ -6,7 +6,7 @@ import { PlayerData } from "./playerData.js";
 
 
 window.onload = () => {
-    const socket = io.connect("http://localhost:3000");
+    const socket = io.connect("localhost:3000");
     const playerData = new PlayerData(socket);
     const colors = ["white", "maroon", "red", "yellow", "lime", "green", "aqua", "teal", "blue", "purple"];
     const playerDef = {
